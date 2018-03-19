@@ -30,8 +30,9 @@ void MVLL();
 int main(int argc,char *argv[]) {
   if(argc==1) std::cout<<argv[0]<<std::endl;
   test(logLL,10);
-  test(RPF,10);
-  test(MVLL,10);
+  test(logLL,10000);
+  test(RPF,10000);
+  test(MVLL,10000);
   return 0;
 }
 

@@ -26,7 +26,7 @@ set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};-std=c++11;-G;-g;-lineinfo;--compiler-op
 # Specify target & source files to compile it from
 cuda_add_library(
   func_cuda
-  fun.cu
+  tool.cu
   )
 cuda_add_executable(
   timer

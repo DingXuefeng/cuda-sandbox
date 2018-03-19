@@ -17,12 +17,15 @@ typedef float (*nvstdfunction)(float x,float y);
   cudaError_t ret = cudaGetSymbolAddress(&address, OP_PTR ## _ptr); \
   if(ret!=cudaSuccess) { std::cout<<"on line "<<__LINE__<<std::endl; throw std::runtime_error(std::string(cudaGetErrorString(ret))); } \
   test(new BinaryOp(address)); 
-__device__ float sum(float x,float y) { return x+y; }
-__device__ nvstdfunction sum_ptr = sum;
-__device__ float product(float x,float y) { return x*y; }
-__device__ nvstdfunction product_ptr = product;
-__device__ float minus(float x,float y) { return x-y; }
-__device__ nvstdfunction minus_ptr = minus;
+
+#include "fun.icc"
+
+#define REGISTER(fun) \
+__device__ nvstdfunction fun ## _ptr = fun;
+REGISTER(logLLdev)
+REGISTER(RPFdev)
+REGISTER(MVLLdev)
+
 struct BinaryOp: public thrust::binary_function<float,float,float> {
 
   BinaryOp(void *address) { 
@@ -53,29 +56,14 @@ void test ( struct BinaryOp*op) {
 
   y_th_host_v = y_th_dev_v;
 
-  // Check for errors (all values should be 3.0f)
-  float maxError = 0.0f;
-  for (int i = 0; i < N; i++) {
-    maxError = fmax(maxError, fabs(y_th_host_v[i]-3.0f));
-  }
-  std::cout << "Max error: " << maxError << std::endl;
-  maxError = 0;
-  for (int i = 0; i < N; i++) {
-    maxError = fmax(maxError, fabs(y_th_host_v[i]-2.0f));
-  }
-  std::cout << "Max error: " << maxError << std::endl;
-  maxError = 0;
-  for (int i = 0; i < N; i++) {
-    maxError = fmax(maxError, fabs(y_th_host_v[i]+1.0f));
-  }
-  std::cout << "Max error: " << maxError << std::endl;
+//  std::cout<<y_th_host_v[0]<<std::endl;
 }
 void logLL() {
-  TEST(sum)
+  TEST(logLLdev)
 }
 void RPF() {
-  TEST(product)
+  TEST(RPFdev)
 }
 void MVLL() {
-  TEST(minus)
+  TEST(MVLLdev)
 }

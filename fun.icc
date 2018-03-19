@@ -1,0 +1,35 @@
+__device__ float logLLdev(float M,float T) { 
+  // M: 1 T: 1
+  M = 100;
+  T = 99.5;
+  return T-M*log(T)+::lgamma(M+1);
+}
+__device__ float RPFdev(float E,float npe) { 
+  E = 1003;
+  npe = 500;
+  const float feq = 1.3;
+  const float ly = 0.5;
+  const float g1 = (0.3+1)*feq;
+  const float g2 = 1.2*feq*feq;
+  const float g3 = 5/2000.;
+
+  const float mu = (1-pow(1+E/2.78788,-0.528003))*ly*E;
+  const float b = (g2+3*g1*g3*mu)/(3*(g1+g3*mu));
+  const float a = -b*b + (g1-b)*mu+g3*mu*mu;
+  const float sig_inv = 1./sqrt(a+b*npe);
+  float arg = (npe - mu + b)*sig_inv;
+  arg*=-0.5*arg;
+  return 0.3989422804*sig_inv*exp(arg);
+}
+__device__ float MVLLdev(float M,float T) { 
+  float total_prob = 0;
+  const int k(10);
+  const int n0(2);
+  const int n1(5);
+  const float m0(1.3);
+  const float m1(0.9);
+  auto log_prob = [](int k,float m,int n) { return lgamma(float(n+k+1))+k*log(m)-(n+k+1)*log(m+1)-lgamma(float(k+1))-lgamma(float(n+1)); };
+  for(int i=0; i<=k; ++i)
+    total_prob += exp(log_prob( (k-i),m0,n0) + log_prob(i,m1,n1));
+  return log(total_prob);
+}

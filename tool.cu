@@ -7,6 +7,7 @@
 #include <thrust/device_vector.h> // for binary_function
 
 typedef float (*nvstdfunction)(float x,float y);
+int _M;
 
 #define MEMCPY_TO_SYMBOL(target, source, count, offset, direction) \
   do { cudaError_t ret = cudaMemcpyToSymbol(target, source, count, offset, direction); \
@@ -43,11 +44,9 @@ struct BinaryOp: public thrust::binary_function<float,float,float> {
 };
 
 void test ( struct BinaryOp*op) {
-  const int N = 1<<10;
-
   thrust::host_vector<float> x_th_host_v;
   thrust::host_vector<float> y_th_host_v;
-  for (int i = 0; i < N; i++) {
+  for (int i = 0; i < _M; i++) {
     x_th_host_v.push_back(1.0f);
     y_th_host_v.push_back(2.0f);
   }
@@ -66,8 +65,12 @@ void logLL() {
 void RPF() {
   TEST(RPFdev)
 }
-void MVLL() {
+void MVLL20() {
   TEST(MVLLdev20)
+}
+void MVLL50() {
   TEST(MVLLdev50)
+}
+void MVLL70() {
   TEST(MVLLdev70)
 }

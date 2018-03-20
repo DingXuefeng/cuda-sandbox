@@ -2,7 +2,8 @@
 #include <sys/times.h>
 #include <iostream>
 #include <functional>
-void test(std::function<void()> t,int N) {
+extern int _M;
+void test(std::function<void()> t,int N,int M) {
   clock_t startCPU, stopCPU;
   timeval startTime, stopTime, totalTime;
 //  tms startProc, stopProc;
@@ -10,6 +11,7 @@ void test(std::function<void()> t,int N) {
 //  startCPU = times(&startProc);
 
   for(int i = 0 ;i<N;++i) {
+    _M = M;
     t();
   }
 
@@ -26,14 +28,19 @@ void test(std::function<void()> t,int N) {
 }
 void logLL();
 void RPF();
-void MVLL();
+void MVLL20();
+void MVLL50();
+void MVLL70();
 int main(int argc,char *argv[]) {
-  if(argc!=2) { std::cout<<"usage: "<<argv[0]<<" <N> where N is the scale of the test."<<std::endl; return 0; }
+  if(argc!=3) { std::cout<<"usage: "<<argv[0]<<" <N> <M> where M is the scale of the test, N is the number of tests to be performed"<<std::endl; return 0; }
   int N = atoi(argv[1]);
-  test(logLL,10);
-  test(logLL,N);
-  test(RPF,N);
-  test(MVLL,N);
+  int M = atoi(argv[2]);
+  test(logLL,10,1024);
+  test(logLL,N,M);
+  test(RPF,N,M);
+//  test(MVLL20,N);
+//  test(MVLL50,N);
+//  test(MVLL70,N);
   return 0;
 }
 

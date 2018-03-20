@@ -23,7 +23,7 @@ __device__ float RPFdev(float E,float npe) {
 }
 __device__ float MVLLdev20(float M,float T) { 
   float total_prob = 0;
-  const int k(20);
+  const int k(M);
   const int n0(2);
   const int n1(5);
   const float m0(1.3);

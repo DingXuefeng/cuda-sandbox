@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <stdexcept>
+#include <random>
 
 #include <thrust/functional.h> // for binary_function
 #include <thrust/host_vector.h> // for binary_function
@@ -44,10 +45,14 @@ struct BinaryOp: public thrust::binary_function<float,float,float> {
 };
 
 void test ( struct BinaryOp*op) {
+   std::random_device r;
+   std::default_random_engine e1(r());
+   std::uniform_real_distribution<float> uniform_dist(100, 600);
+
   thrust::host_vector<float> x_th_host_v;
   thrust::host_vector<float> y_th_host_v;
   for (int i = 0; i < _M; i++) {
-    x_th_host_v.push_back(1.0f);
+    x_th_host_v.push_back(uniform_dist(e1));
     y_th_host_v.push_back(2.0f);
   }
   thrust::device_vector<float> x_th_dev_v(x_th_host_v);

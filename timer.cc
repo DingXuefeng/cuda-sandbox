@@ -36,9 +36,9 @@ int main(int argc,char *argv[]) {
   int N = atoi(argv[1]);
   int M = atoi(argv[2]);
   test(logLL,10,1024);
-  test(logLL,N,M);
-  test(RPF,N,M);
-//  test(MVLL20,N);
+//  test(logLL,N,M);
+//  test(RPF,N,M);
+  test(MVLL20,N,M);
 //  test(MVLL50,N);
 //  test(MVLL70,N);
   return 0;

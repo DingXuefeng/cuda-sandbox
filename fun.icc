@@ -21,9 +21,33 @@ __device__ float RPFdev(float E,float npe) {
   arg*=-0.5*arg;
   return 0.3989422804*sig_inv*exp(arg);
 }
-__device__ float MVLLdev(float M,float T) { 
+__device__ float MVLLdev20(float M,float T) { 
   float total_prob = 0;
-  const int k(10);
+  const int k(20);
+  const int n0(2);
+  const int n1(5);
+  const float m0(1.3);
+  const float m1(0.9);
+  auto log_prob = [](int k,float m,int n) { return lgamma(float(n+k+1))+k*log(m)-(n+k+1)*log(m+1)-lgamma(float(k+1))-lgamma(float(n+1)); };
+  for(int i=0; i<=k; ++i)
+    total_prob += exp(log_prob( (k-i),m0,n0) + log_prob(i,m1,n1));
+  return log(total_prob);
+}
+__device__ float MVLLdev50(float M,float T) { 
+  float total_prob = 0;
+  const int k(50);
+  const int n0(2);
+  const int n1(5);
+  const float m0(1.3);
+  const float m1(0.9);
+  auto log_prob = [](int k,float m,int n) { return lgamma(float(n+k+1))+k*log(m)-(n+k+1)*log(m+1)-lgamma(float(k+1))-lgamma(float(n+1)); };
+  for(int i=0; i<=k; ++i)
+    total_prob += exp(log_prob( (k-i),m0,n0) + log_prob(i,m1,n1));
+  return log(total_prob);
+}
+__device__ float MVLLdev70(float M,float T) { 
+  float total_prob = 0;
+  const int k(70);
   const int n0(2);
   const int n1(5);
   const float m0(1.3);

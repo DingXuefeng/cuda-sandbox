@@ -13,10 +13,10 @@ typedef float (*nvstdfunction)(float x,float y);
       if(ret!=cudaSuccess) throw runtime_error(string(cudaGetErrorString(ret))); } while(0)
 
 #define TEST(OP_PTR)  \
-  void *address; \
+  do { void *address; \
   cudaError_t ret = cudaGetSymbolAddress(&address, OP_PTR ## _ptr); \
   if(ret!=cudaSuccess) { std::cout<<"on line "<<__LINE__<<std::endl; throw std::runtime_error(std::string(cudaGetErrorString(ret))); } \
-  test(new BinaryOp(address)); 
+  test(new BinaryOp(address)); } while (0);
 
 #include "fun.icc"
 
@@ -24,7 +24,9 @@ typedef float (*nvstdfunction)(float x,float y);
 __device__ nvstdfunction fun ## _ptr = fun;
 REGISTER(logLLdev)
 REGISTER(RPFdev)
-REGISTER(MVLLdev)
+REGISTER(MVLLdev20)
+REGISTER(MVLLdev50)
+REGISTER(MVLLdev70)
 
 struct BinaryOp: public thrust::binary_function<float,float,float> {
 
@@ -65,5 +67,7 @@ void RPF() {
   TEST(RPFdev)
 }
 void MVLL() {
-  TEST(MVLLdev)
+  TEST(MVLLdev20)
+  TEST(MVLLdev50)
+  TEST(MVLLdev70)
 }

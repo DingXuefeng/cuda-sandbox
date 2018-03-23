@@ -1,14 +1,15 @@
 ### CMakeLists.txt for CUDA
 
 cmake_minimum_required(VERSION 3.4)
-find_package(CUDA QUIET REQUIRED)
+find_package(CUDA REQUIRED)
 #find_package(Thrust REQUIRED)
 
 set(CMAKE_C_COMPILER gcc)
 set(CMAKE_CXX_COMPILER g++)
 # Pass options to NVCC
 #set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};--compiler-options;-Werror,-Wall,-Wextra,-Werror=return-type")
-set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};-std=c++11;-G;-g;-lineinfo;--compiler-options;-Wall,-Wextra,-Werror=return-type")
+set(CUDA_NVCC_FLAGS
+  "${CUDA_NVCC_FLAGS};-std=c++11;-G;-g;-lineinfo;--compiler-options;-Wall,-Wextra,-Werror=return-type")
 
 # Specify include directories
 #include_directories(

@@ -1,6 +1,6 @@
-#include "Foo.hpp"
 #include "Bar.hpp"
-#inlcude "Boo.hpp"
+#include "Foo.hpp"
+#include "Boo.hpp"
 void Bar::inviteFoo() {
   Foo foo;
   foo.say();
